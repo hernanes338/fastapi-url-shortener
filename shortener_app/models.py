@@ -1,4 +1,4 @@
-# Defines how the data should be stored in the database
+# Defines how the data should be stored in the database and it describes the content of your database
 
 from sqlalchemy import Boolean, Column, Integer, String
 

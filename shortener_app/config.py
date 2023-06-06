@@ -15,7 +15,3 @@ def get_settings() -> Settings:
     settings = Settings()
     print(f"Loading settings for: {settings.env_name}")
     return settings
-
-
-print(get_settings().base_url)
-print(get_settings().db_url)
