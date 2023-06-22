@@ -59,6 +59,7 @@ def forward_to_target_url(
         db: Session = Depends(get_db)
     ):
     if db_url := crud.get_db_url_by_key(db=db, url_key=url_key): # walrus operator to assign variables in the middle of an expression
+        crud.update_db_clicks(db=db, db_url=db_url)
         return RedirectResponse(db_url.target_url)
     else:
         raise_not_found(request)
