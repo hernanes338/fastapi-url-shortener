@@ -75,14 +75,26 @@ def get_url_info(
     else:
         raise_not_found(request)
 
+@app.post("/admin/{secret_key}")
+def activate_url(
+        secret_key: str, 
+        request: Request, 
+        db: Session = Depends(get_db)
+    ):
+    if db_url := crud.activate_db_url_by_secret_key(db, secret_key=secret_key):
+        message = f"Successfully activated the shortened URL for '{db_url.target_url}'"
+        return {"detail": message}
+    else:
+        raise_not_found(request)
+
 @app.delete("/admin/{secret_key}")
-def delete_url(
+def deactivate_url(
         secret_key: str, 
         request: Request, 
         db: Session = Depends(get_db)
     ):
     if db_url := crud.deactivate_db_url_by_secret_key(db, secret_key=secret_key):
-        message = f"Successfully deleted shortened URL for '{db_url.target_url}'"
+        message = f"Successfully deactivated the shortened URL for '{db_url.target_url}'"
         return {"detail": message}
     else:
         raise_not_found(request)
