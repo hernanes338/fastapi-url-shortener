@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
+# cache the result of get_settings() using the LRU (Least Recently Used) strategy
+# made the app faster while decreasing the load on computing resources
 @lru_cache
 def get_settings() -> Settings:
     settings = Settings()
