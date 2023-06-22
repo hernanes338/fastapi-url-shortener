@@ -21,10 +21,10 @@ def create_db_url(db: Session, url: schemas.URLBase) -> models.URL:
     return db_url
 
 # checks the database for an active database entry with the provided secret_key
-def get_db_url_by_admin_key(db: Session, admin_key: str) -> models.URL:  # returns either None or a database entry with a provided key
+def get_db_url_by_secret_key(db: Session, secret_key: str) -> models.URL:  # returns either None or a database entry with a provided key
     return (
         db.query(models.URL)
-        .filter(models.URL.admin_url == admin_key)
+        .filter(models.URL.secret_key == secret_key)
         .first()
     )
 
@@ -32,4 +32,12 @@ def update_db_clicks(db: Session, db_url: schemas.URL) -> models.URL:
     db_url.clicks += 1
     db.commit()
     db.refresh(db_url)
+    return db_url
+
+def deactivate_db_url_by_secret_key(db: Session, secret_key: str) -> models.URL:
+    db_url = get_db_url_by_secret_key(db, secret_key)
+    if db_url:
+        db_url.is_active = False
+        db.commit()
+        db.refresh(db_url)
     return db_url
